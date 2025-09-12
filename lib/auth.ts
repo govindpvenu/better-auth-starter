@@ -27,7 +27,8 @@ export const auth = betterAuth({
         if (type === "sign-in") {
           await sendEmail({ email, otp });
         } else if (type === "email-verification") {
-          // Send the OTP for email verification
+          //This is from resend.
+          await sendEmailVerification(email, otp);
         } else {
           // Send the OTP for password reset
         }
@@ -36,3 +37,29 @@ export const auth = betterAuth({
     nextCookies(),
   ], // make sure this is the last plugin in the array
 });
+
+async function sendEmailVerification(email: string, otp: string) {
+  try {
+    const baseUrl = process.env.BETTER_AUTH_URL || "http://localhost:3000";
+    const response = await fetch(`${baseUrl}/api/send-email-verification`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, otp }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        `Failed to send email verification: ${errorData.error || response.statusText}`
+      );
+    }
+
+    const result = await response.json();
+    console.log("Email verification sent successfully:", result);
+  } catch (error) {
+    console.error("Error sending email verification:", error);
+    throw error;
+  }
+}
