@@ -5,11 +5,12 @@ import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "../ui/button";
+import { DropdownMenuItem } from "../ui/dropdown-menu";
 
 export function LogoutButton() {
   const router = useRouter();
   return (
-    <Button
+    <DropdownMenuItem
       onClick={async () => {
         await authClient.signOut({
           fetchOptions: {
@@ -22,6 +23,6 @@ export function LogoutButton() {
     >
       <LogOut className="mr-2 h-4 w-4" />
       <span>Log out</span>
-    </Button>
+    </DropdownMenuItem>
   );
 }

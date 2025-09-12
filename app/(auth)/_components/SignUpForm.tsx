@@ -21,18 +21,27 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { OTPForm } from "./OTPForm";
+import { Stage } from "@/types/authTypes";
+import Link from "next/link";
 
-const formSchema = z.object({
-  name: z.string(),
-  email: z.email(),
-  password: z.string(),
-  confirm_password: z.string(),
-});
+const formSchema = z
+  .object({
+    name: z.string(),
+    email: z.email(),
+    password: z.string(),
+    confirm_password: z.string(),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: "Passwords do not match",
+    path: ["confirm_password"], // 👈 error will show up at confirm_password field
+  });
 
 export function SignUpForm() {
   const router = useRouter();
-
   const [isLoading, setIsLoading] = useState(false);
+  const [stage, setStage] = useState<Stage>({ stage: "sign-up", email: "" });
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,13 +73,16 @@ export function SignUpForm() {
           //show loading
           setIsLoading(true);
         },
-        onSuccess: (ctx) => {
-          //redirect to the dashboard or sign in page
-          router.push("/");
+        onSuccess: async (ctx) => {
+          setStage({ stage: "email-verification", email: email });
           setIsLoading(false);
+          await authClient.emailOtp.sendVerificationOtp({
+            email: email,
+            type: "sign-in",
+          });
         },
         onError: (ctx) => {
-          // display the error message
+          // display the error messagsendVerificationOtpe
           toast.error(ctx.error.message);
           setIsLoading(false);
         },
@@ -78,6 +90,10 @@ export function SignUpForm() {
     );
 
     console.log("data:", data, "error:", error);
+  }
+
+  if (stage.stage === "email-verification") {
+    return <OTPForm stage={stage} />;
   }
 
   return (
@@ -169,6 +185,13 @@ export function SignUpForm() {
               </FormItem>
             )}
           />
+
+          <div className="mt-4 text-center text-sm">
+            Already have an account?
+            <Link href="/sign-in" className="underline">
+              Log in
+            </Link>
+          </div>
 
           <div className="flex justify-end items-center w-full pt-3">
             <Button disabled={isLoading} className="rounded-lg" size="sm">
