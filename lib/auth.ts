@@ -4,6 +4,7 @@ import { db } from "@/db/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { authSchema } from "@/db/schemas";
 import { emailOTP } from "better-auth/plugins/email-otp";
+import { sendEmail } from "@/actions/sendEmail";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -24,7 +25,7 @@ export const auth = betterAuth({
       async sendVerificationOTP({ email, otp, type }) {
         console.log(`Sending OTP: ${otp}, to ${email},for ${type}`);
         if (type === "sign-in") {
-          // Send the OTP for sign in
+          await sendEmail({ email, otp });
         } else if (type === "email-verification") {
           // Send the OTP for email verification
         } else {
