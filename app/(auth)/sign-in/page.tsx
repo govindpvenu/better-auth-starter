@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { SignInForm } from "../_components/SignInForm";
 import { GalleryVerticalEnd } from "lucide-react";
 
@@ -5,7 +6,9 @@ export default function SignInPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="bg-muted relative hidden lg:block">
-        <img
+        <Image
+          width={100}
+          height={100}
           src="/placeholder.svg"
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"

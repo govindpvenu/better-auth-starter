@@ -11,7 +11,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Password } from "@/components/password";
@@ -20,12 +19,9 @@ import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { Stage } from "@/types/authTypes";
 import { OTPForm } from "./OTPForm";
 import Link from "next/link";
-import { Label } from "@/components/ui/label";
-import { ErrorContext } from "better-auth/react";
 import { GitHubAuth } from "./GitHubAuth";
 import { GoogleAuth } from "./GoogleAuth";
 

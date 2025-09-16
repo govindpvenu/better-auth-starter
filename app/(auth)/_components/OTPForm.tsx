@@ -12,7 +12,6 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {
@@ -155,7 +154,7 @@ export function OTPForm({ stage }: { stage: Stage }) {
             </Button>
 
             <div className="text-center text-sm">
-              Didn't receive the code?{" "}
+              Didn&apos;t receive the code?{" "}
               <button
                 type="button"
                 className="underline underline-offset-4 hover:text-primary"
