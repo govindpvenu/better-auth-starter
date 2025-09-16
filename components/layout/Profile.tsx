@@ -9,9 +9,20 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { User } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import Link from "next/link";
-import { LogoutButton } from "./LogOut";
+import { ConfirmLogOut } from "./ConfirmLogOut";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export async function Profile() {
   const session = await auth.api.getSession({
@@ -24,34 +35,53 @@ export async function Profile() {
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Avatar>
-          <AvatarImage src={session?.user?.image ?? undefined} />
-          <AvatarFallback>
-            {session?.user?.name[0]}
-            {session?.user?.name[0]}
-          </AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <div className="flex flex-col">
-          <span className="mx-4 font-bold">{session?.user?.name}</span>
-          <span className="mx-4 text-sm">{session?.user?.email}</span>
-        </div>
-        <DropdownMenuSeparator />
+    <AlertDialog>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Avatar>
+            <AvatarImage src={session?.user?.image ?? undefined} />
+            <AvatarFallback>
+              {session?.user?.name[0]}
+              {session?.user?.name[0]}
+            </AvatarFallback>
+          </Avatar>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56">
+          <div className="flex flex-col">
+            <span className="mx-4 font-bold">{session?.user?.name}</span>
+            <span className="mx-4 text-sm">{session?.user?.email}</span>
+          </div>
+          <DropdownMenuSeparator />
 
-        <DropdownMenuGroup>
-          <Link href={"/profile"}>
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-            </DropdownMenuItem>
-          </Link>
+          <DropdownMenuGroup>
+            <Link href={"/profile"}>
+              <DropdownMenuItem>
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+            </Link>
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </AlertDialogTrigger>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
-          <LogoutButton />
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle> Log out </AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to log out?
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <ConfirmLogOut />
+          <AlertDialogCancel>Nope</AlertDialogCancel>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
