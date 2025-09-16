@@ -18,6 +18,7 @@ import {
 import {
   InputOTP,
   InputOTPGroup,
+  InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useRouter } from "next/navigation";
@@ -70,39 +71,102 @@ export function OTPForm({ stage }: { stage: Stage }) {
     );
   }
 
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
-        <FormField
-          control={form.control}
-          name="otp"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>One-Time Password</FormLabel>
-              <FormControl>
-                <InputOTP maxLength={6} {...field}>
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
-              </FormControl>
-              <FormDescription>
-                Please enter the one-time password sent to your phone.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+  async function resendOtp() {
+    await authClient.emailOtp.sendVerificationOtp(
+      {
+        email: stage.email,
+        type: "sign-in",
+      },
+      {
+        onRequest: (ctx) => {
+          //show loading
+          setLoading(true);
+        },
+        onSuccess: async (ctx) => {
+          setLoading(false);
+          toast.success("Verification code resent!");
+        },
+        onError: (ctx) => {
+          setLoading(false);
+          toast.error("Failed to resend code. Please try again.");
+        },
+      }
+    );
+  }
 
-        <Button type="submit">
-          {loading ? <LoaderCircle className="animate-spin" /> : "Submit"}
-        </Button>
-      </form>
-    </Form>
+  return (
+    <div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-6"
+        >
+          <div className="flex flex-col items-center gap-2 text-center">
+            <h1 className="text-2xl font-bold">Verify your email</h1>
+            <p className="text-muted-foreground text-sm text-balance">
+              Check {stage.email} for the verification code
+            </p>
+          </div>
+
+          <div className="grid gap-6">
+            <div className="grid gap-3">
+              <FormField
+                control={form.control}
+                name="otp"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <div className="flex flex-col items-center gap-4 justify-center">
+                      <FormControl>
+                        <InputOTP maxLength={6} {...field}>
+                          <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                          </InputOTPGroup>
+                          <InputOTPSeparator />
+                          <InputOTPGroup>
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                      </FormControl>
+                      <FormDescription className="text-center">
+                        Please enter the 6-digit code.
+                      </FormDescription>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="rounded-lg"
+              size="sm"
+            >
+              {loading ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                "Verify Email"
+              )}
+            </Button>
+
+            <div className="text-center text-sm">
+              Didn't receive the code?{" "}
+              <button
+                type="button"
+                className="underline underline-offset-4 hover:text-primary"
+                onClick={resendOtp}
+              >
+                Resend code
+              </button>
+            </div>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }
