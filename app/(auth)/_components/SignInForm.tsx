@@ -28,6 +28,7 @@ import Link from "next/link";
 const formSchema = z.object({
   email: z.email(),
   password: z.string(),
+  remember_me: z.boolean().optional(),
 });
 
 export function SignInForm() {
@@ -40,6 +41,7 @@ export function SignInForm() {
     defaultValues: {
       email: "test@test.com",
       password: "12345678",
+      remember_me: true,
     },
   });
 
@@ -49,14 +51,14 @@ export function SignInForm() {
     // ✅ This will be type-safe and validated.
     console.log(values);
 
-    const { email, password } = values;
+    const { email, password, remember_me } = values;
 
     const { data, error } = await authClient.signIn.email(
       {
         email, // user email address
         password, // user password -> min 8 characters by default
         callbackURL: "/", // A URL to redirect to after the user verifies their email (optional)
-        rememberMe: true, //Remember me
+        rememberMe: remember_me || false, //Remember me
       },
       {
         onRequest: (ctx) => {
@@ -138,6 +140,26 @@ export function SignInForm() {
                   <Password {...field} required placeholder="Password" />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="remember_me"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="text-sm font-normal">
+                    Remember me
+                  </FormLabel>
+                </div>
               </FormItem>
             )}
           />
