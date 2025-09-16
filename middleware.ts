@@ -8,6 +8,7 @@ export async function middleware(request: NextRequest) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+  console.log("session:", session);
 
   const isAuthRoute = authRoutes.includes(request.nextUrl.pathname);
   // const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
