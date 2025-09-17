@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { ErrorContext } from "better-auth/react";
@@ -5,7 +6,7 @@ import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export function GoogleAuth() {
+export function GoogleAuth({ lastMethod }: { lastMethod: string | null }) {
   const [pendingGoogle, setPendingGoogle] = useState(false);
 
   async function signInWithGoogle() {
@@ -33,8 +34,13 @@ export function GoogleAuth() {
       onClick={signInWithGoogle}
       disabled={pendingGoogle}
       variant="outline"
-      className="w-full"
+      className="w-full relative"
     >
+      {lastMethod === "google" && (
+        <Badge className="absolute top-0 right-0 -mt-2 -mr-2 leading-none z-10">
+          Last used
+        </Badge>
+      )}
       {pendingGoogle ? (
         <LoaderCircle className="animate-spin" />
       ) : (

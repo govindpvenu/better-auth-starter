@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Password } from "@/components/password";
 import { Checkbox } from "@/components/ui/checkbox";
 import { authClient } from "@/lib/auth-client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 import { Stage } from "@/types/authTypes";
@@ -24,6 +24,7 @@ import { OTPForm } from "./OTPForm";
 import Link from "next/link";
 import { GitHubAuth } from "./GitHubAuth";
 import { GoogleAuth } from "./GoogleAuth";
+import { Badge } from "@/components/ui/badge";
 
 const formSchema = z.object({
   email: z.email(),
@@ -36,6 +37,15 @@ const formSchema = z.object({
 export function SignInForm() {
   const [stage, setStage] = useState<Stage>({ stage: "sign-in", email: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [lastMethod, setLastMethod] = useState<string | null>(null);
+  useEffect(() => {
+    // runs only on client, after hydration
+    try {
+      setLastMethod(authClient.getLastUsedLoginMethod());
+    } catch {}
+    setMounted(true);
+  }, []);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -176,7 +186,20 @@ export function SignInForm() {
                 )}
               />
             </div>
-            <Button disabled={isLoading} className="rounded-lg" size="sm">
+            <Button
+              disabled={isLoading}
+              className="rounded-lg relative"
+              size="sm"
+            >
+              {mounted && lastMethod === "email" && (
+                <Badge
+                  asChild={false}
+                  variant="secondary"
+                  className="absolute top-0 right-0 -mt-2 -mr-2 leading-none z-10"
+                >
+                  Last used
+                </Badge>
+              )}
               {isLoading ? (
                 <LoaderCircle className="animate-spin" />
               ) : (
@@ -190,9 +213,9 @@ export function SignInForm() {
               </span>
             </div>
 
-            <GitHubAuth />
+            <GitHubAuth lastMethod={lastMethod} />
 
-            <GoogleAuth />
+            <GoogleAuth lastMethod={lastMethod} />
           </div>
           <div className="text-center text-sm">
             Don&apos;t have an account?{" "}

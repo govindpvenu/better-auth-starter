@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { authClient } from "@/lib/auth-client";
 import { ErrorContext } from "better-auth/react";
 import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export function GitHubAuth() {
+export function GitHubAuth({ lastMethod }: { lastMethod: string | null }) {
   const [pendingGithub, setPendingGithub] = useState(false);
 
   async function signInWithGithub() {
@@ -33,8 +34,13 @@ export function GitHubAuth() {
       onClick={signInWithGithub}
       disabled={pendingGithub}
       variant="outline"
-      className="w-full"
+      className="w-full relative"
     >
+      {lastMethod === "github" && (
+        <Badge className="absolute top-0 right-0 -mt-2 -mr-2 leading-none z-10">
+          Last used
+        </Badge>
+      )}
       {pendingGithub ? (
         <LoaderCircle className="animate-spin" />
       ) : (

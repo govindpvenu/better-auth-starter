@@ -24,6 +24,7 @@ import { Stage } from "@/types/authTypes";
 import Link from "next/link";
 import { GitHubAuth } from "./GitHubAuth";
 import { GoogleAuth } from "./GoogleAuth";
+import { Badge } from "@/components/ui/badge";
 
 const formSchema = z
   .object({
@@ -45,7 +46,7 @@ export function SignUpForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [stage, setStage] = useState<Stage>({ stage: "sign-up", email: "" });
-
+  const lastMethod = authClient.getLastUsedLoginMethod();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -105,7 +106,7 @@ export function SignUpForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-6"
+          className="flex flex-col gap-4"
         >
           <div className="flex flex-col items-center gap-2 text-center">
             <h1 className="text-2xl font-bold">Create your account</h1>
@@ -114,7 +115,7 @@ export function SignUpForm() {
             </p>
           </div>
 
-          <div className="grid gap-6">
+          <div className="grid gap-3">
             <div className="grid gap-3">
               <FormField
                 control={form.control}
@@ -214,14 +215,14 @@ export function SignUpForm() {
                 Or continue with
               </span>
             </div>
-            <GitHubAuth />
-            <GoogleAuth />
+            <GitHubAuth lastMethod={lastMethod} />
+            <GoogleAuth lastMethod={lastMethod} />
           </div>
 
           <div className="text-center text-sm">
             Already have an account?{" "}
             <Link href="/sign-in" className="underline underline-offset-4">
-              Log in
+              Sign in
             </Link>
           </div>
         </form>
