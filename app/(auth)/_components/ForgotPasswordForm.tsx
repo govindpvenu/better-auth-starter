@@ -37,7 +37,8 @@ export default function ForgotPasswordForm({ email }: { email: string }) {
     const { data, error } = await authClient.requestPasswordReset(
       {
         email: email,
-        redirectTo: "http://localhost:3000/reset-password",
+
+        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password`,
       },
       {
         onRequest: () => {
