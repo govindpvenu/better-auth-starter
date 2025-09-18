@@ -18,13 +18,11 @@ import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { OTPForm } from "./OTPForm";
 import { Stage } from "@/types/authTypes";
 import Link from "next/link";
 import { GitHubAuth } from "./GitHubAuth";
 import { GoogleAuth } from "./GoogleAuth";
-import { Badge } from "@/components/ui/badge";
 
 const formSchema = z
   .object({
@@ -43,7 +41,6 @@ const formSchema = z
   });
 
 export function SignUpForm() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [stage, setStage] = useState<Stage>({ stage: "sign-up", email: "" });
   const lastMethod = authClient.getLastUsedLoginMethod();

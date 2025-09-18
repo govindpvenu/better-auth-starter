@@ -17,6 +17,26 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    sendResetPassword: async ({ user, url, token }, request) => {
+      console.log(`user: ${user}, url: ${url}, token: ${token}`);
+      // await sendEmail({
+      //   to: user.email,
+      //   subject: "Reset your password",
+      //   text: `Click the link to reset your password: ${url}`,
+      // });
+    },
+    onPasswordReset: async ({ user }, request) => {
+      // your logic here
+      console.log(`Password for user ${user.email} has been reset.`);
+
+      // Notify user
+      // sendSecurityEmail({
+      //   to: user.email,
+      //   subject: "Your password was changed",
+      //   text:
+      //     "If you didn’t make this change, reset your password again and contact support.",
+      // }),
+    },
   },
   socialProviders: {
     github: {

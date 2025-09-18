@@ -152,12 +152,12 @@ export function SignInForm() {
                   <FormItem className="w-full">
                     <div className="flex items-center">
                       <FormLabel>Password *</FormLabel>
-                      <a
-                        href="#"
+                      <Link
+                        href={`/forgot-password?email=${form.watch("email")}`}
                         className="ml-auto text-sm underline-offset-4 hover:underline"
                       >
                         Forgot your password?
-                      </a>
+                      </Link>
                     </div>
                     <FormControl>
                       <Password {...field} required placeholder="Password" />
@@ -193,7 +193,6 @@ export function SignInForm() {
             >
               {mounted && lastMethod === "email" && (
                 <Badge
-                  asChild={false}
                   variant="secondary"
                   className="absolute top-0 right-0 -mt-2 -mr-2 leading-none z-10"
                 >

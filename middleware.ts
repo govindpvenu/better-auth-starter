@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
-const authRoutes = ["/sign-in", "/sign-up", "/admin/sign-in"];
+const authRoutes = [
+  "/sign-in",
+  "/sign-up",
+  "/forgot-password",
+  "/reset-password",
+];
 
 export async function middleware(request: NextRequest) {
   const session = await auth.api.getSession({
