@@ -3,7 +3,7 @@ import { Profile } from "./Profile";
 
 export default function Header() {
   return (
-    <header className="flex items-center border-b justify-between p-4">
+    <header className="sticky top-0 z-50 flex items-center border-b justify-between p-4 bg-background">
       <h1 className="text-2xl font-bold">Better Auth Starter</h1>
       <div className="flex items-center gap-2">
         <ModeToggle />

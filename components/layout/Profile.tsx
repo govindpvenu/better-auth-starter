@@ -9,7 +9,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { LogOut, User } from "lucide-react";
+import { LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { ConfirmLogOut } from "./ConfirmLogOut";
 import {
@@ -54,10 +54,10 @@ export async function Profile() {
           <DropdownMenuSeparator />
 
           <DropdownMenuGroup>
-            <Link href={"/profile"}>
+            <Link href={"/settings"}>
               <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
               </DropdownMenuItem>
             </Link>
             <AlertDialogTrigger asChild>
