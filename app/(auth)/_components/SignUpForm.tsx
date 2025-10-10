@@ -17,16 +17,21 @@ import { Password } from "@/components/password";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { toast } from "sonner";
-import { LoaderCircle } from "lucide-react";
 import { OTPForm } from "./OTPForm";
 import { Stage } from "@/types/authTypes";
 import Link from "next/link";
 import { GitHubAuth } from "./GitHubAuth";
 import { GoogleAuth } from "./GoogleAuth";
+import { Spinner } from "@/components/ui/spinner";
 
 const formSchema = z
   .object({
-    name: z.string().min(3, { message: "Name must be at least 3 characters" }),
+    first_name: z
+      .string()
+      .min(3, { message: "Name must be at least 3 characters" }),
+    last_name: z
+      .string()
+      .min(1, { message: "Name must be at least 1 character" }),
     email: z.email(),
     password: z
       .string()
@@ -48,7 +53,8 @@ export function SignUpForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "test",
+      first_name: "test",
+      last_name: "user",
       email: "test@test.com",
       password: "12345678",
       confirm_password: "12345678",
@@ -61,13 +67,14 @@ export function SignUpForm() {
     // ✅ This will be type-safe and validated.
     console.log(values);
 
-    const { email, password, name } = values;
-
+    const { email, password, first_name, last_name } = values;
     const { data, error } = await authClient.signUp.email(
       {
         email, // user email address
         password, // user password -> min 8 characters by default
-        name, // user display name
+        name: `${first_name} ${last_name}`,
+        first_name,
+        last_name,
         callbackURL: "/", // A URL to redirect to after the user verifies their email (optional)
       },
       {
@@ -113,13 +120,13 @@ export function SignUpForm() {
           </div>
 
           <div className="grid gap-3">
-            <div className="grid gap-3">
+            <div className="flex gap-3">
               <FormField
                 control={form.control}
-                name="name"
+                name="first_name"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Name *</FormLabel>
+                    <FormLabel>First Name *</FormLabel>
                     <FormControl>
                       <Input
                         type={"text"}
@@ -129,7 +136,29 @@ export function SignUpForm() {
                           field.onChange(val);
                         }}
                         required
-                        placeholder="Enter your Name"
+                        placeholder="Enter your First Name"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="last_name"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Last Name *</FormLabel>
+                    <FormControl>
+                      <Input
+                        type={"text"}
+                        value={field.value}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          field.onChange(val);
+                        }}
+                        required
+                        placeholder="Enter your Last Name"
                       />
                     </FormControl>
                     <FormMessage />
@@ -138,30 +167,28 @@ export function SignUpForm() {
               />
             </div>
 
-            <div className="grid gap-3">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Email *</FormLabel>
-                    <FormControl>
-                      <Input
-                        type={"email"}
-                        value={field.value}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          field.onChange(val);
-                        }}
-                        required
-                        placeholder="Enter your Email"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Email *</FormLabel>
+                  <FormControl>
+                    <Input
+                      type={"email"}
+                      value={field.value}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        field.onChange(val);
+                      }}
+                      required
+                      placeholder="Enter your Email"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="grid gap-3">
               <FormField
@@ -200,11 +227,7 @@ export function SignUpForm() {
             </div>
 
             <Button disabled={isLoading} className="rounded-lg" size="sm">
-              {isLoading ? (
-                <LoaderCircle className="animate-spin" />
-              ) : (
-                "Sign Up"
-              )}
+              {isLoading ? <Spinner /> : "Sign Up"}
             </Button>
 
             <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">

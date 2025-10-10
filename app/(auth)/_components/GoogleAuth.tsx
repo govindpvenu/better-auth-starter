@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { authClient } from "@/lib/auth-client";
 import { ErrorContext } from "better-auth/react";
-import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -42,7 +42,7 @@ export function GoogleAuth({ lastMethod }: { lastMethod: string | null }) {
         </Badge>
       )}
       {pendingGoogle ? (
-        <LoaderCircle className="animate-spin" />
+        <Spinner />
       ) : (
         <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <title>Google</title>

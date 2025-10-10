@@ -24,7 +24,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { Stage } from "@/types/authTypes";
-import { LoaderCircle } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 const FormSchema = z.object({
   otp: z.string().min(6, {
@@ -146,11 +146,7 @@ export function OTPForm({ stage }: { stage: Stage }) {
               className="rounded-lg"
               size="sm"
             >
-              {loading ? (
-                <LoaderCircle className="animate-spin" />
-              ) : (
-                "Verify Email"
-              )}
+              {loading ? <Spinner /> : "Verify Email"}
             </Button>
 
             <div className="text-center text-sm">

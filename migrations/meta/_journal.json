@@ -15,6 +15,13 @@
       "when": 1757500991061,
       "tag": "0001_glorious_thor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1760079799288,
+      "tag": "0002_reflective_crystal",
+      "breakpoints": true
     }
   ]
 }

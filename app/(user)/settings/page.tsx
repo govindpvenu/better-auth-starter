@@ -54,7 +54,7 @@ export default async function SettingsPage() {
 
           {/* Profile Tab Content */}
           <TabsContent value="profile" className="space-y-6">
-            <ProfileDetails />
+            <ProfileDetails user={session?.user} />
             <ConnectedAccounts />
           </TabsContent>
 

@@ -11,6 +11,8 @@ export const user = pgTable("user", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+  first_name: text("first_name").notNull(),
+  last_name: text("last_name").notNull(),
 });
 
 export const session = pgTable("session", {

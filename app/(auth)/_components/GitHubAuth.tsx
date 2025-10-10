@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { authClient } from "@/lib/auth-client";
 import { ErrorContext } from "better-auth/react";
-import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 export function GitHubAuth({ lastMethod }: { lastMethod: string | null }) {
   const [pendingGithub, setPendingGithub] = useState(false);
@@ -42,7 +42,7 @@ export function GitHubAuth({ lastMethod }: { lastMethod: string | null }) {
         </Badge>
       )}
       {pendingGithub ? (
-        <LoaderCircle className="animate-spin" />
+        <Spinner />
       ) : (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path

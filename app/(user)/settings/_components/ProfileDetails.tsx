@@ -4,14 +4,14 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { User } from "better-auth";
 
-export default function ProfileDetails() {
-  const [firstName, setFirstName] = useState("John");
-  const [lastName, setLastName] = useState("Doe");
-  const [email, setEmail] = useState("john@example.com");
-  const [role, setRole] = useState("Product Designer");
+export default function ProfileDetails({ user }: { user: User }) {
+  const [firstName, setFirstName] = useState(user.first_name);
+  const [lastName, setLastName] = useState(user.last_name);
+  const [email, setEmail] = useState(user.email);
   const handleSaveChanges = () => {
-    console.log("Saving changes...", { firstName, lastName, email, role });
+    console.log("Saving changes...", { firstName, lastName, email });
     // Add your save logic here
   };
   return (
@@ -44,14 +44,6 @@ export default function ProfileDetails() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="role">Role</Label>
-            <Input
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
             />
           </div>
         </div>

@@ -18,13 +18,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { authClient } from "@/lib/auth-client";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { LoaderCircle } from "lucide-react";
+import {} from "lucide-react";
 import { Stage } from "@/types/authTypes";
 import { OTPForm } from "./OTPForm";
 import Link from "next/link";
 import { GitHubAuth } from "./GitHubAuth";
 import { GoogleAuth } from "./GoogleAuth";
 import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
 
 const formSchema = z.object({
   email: z.email(),
@@ -199,11 +200,7 @@ export function SignInForm() {
                   Last used
                 </Badge>
               )}
-              {isLoading ? (
-                <LoaderCircle className="animate-spin" />
-              ) : (
-                "Sign In"
-              )}
+              {isLoading ? <Spinner /> : "Sign In"}
             </Button>
 
             <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">

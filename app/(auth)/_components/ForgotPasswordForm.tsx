@@ -15,8 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 const formSchema = z.object({
   email: z.email(),
@@ -106,11 +106,7 @@ export default function ForgotPasswordForm({ email }: { email: string }) {
               className="rounded-lg relative"
               size="sm"
             >
-              {isLoading ? (
-                <LoaderCircle className="animate-spin" />
-              ) : (
-                "Send Reset Email"
-              )}
+              {isLoading ? <Spinner /> : "Send Reset Email"}
             </Button>
           </div>
         </form>

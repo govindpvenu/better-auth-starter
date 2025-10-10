@@ -17,8 +17,8 @@ import { Password } from "@/components/password";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { toast } from "sonner";
-import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/ui/spinner";
 
 const formSchema = z
   .object({
@@ -134,11 +134,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
             </div>
 
             <Button disabled={isLoading} className="rounded-lg" size="sm">
-              {isLoading ? (
-                <LoaderCircle className="animate-spin" />
-              ) : (
-                "Reset Password"
-              )}
+              {isLoading ? <Spinner /> : "Reset Password"}
             </Button>
           </div>
         </form>

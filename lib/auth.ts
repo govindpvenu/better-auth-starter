@@ -14,6 +14,18 @@ export const auth = betterAuth({
       ...authSchema,
     },
   }),
+  user: {
+    additionalFields: {
+      first_name: {
+        type: "string",
+        required: true,
+      },
+      last_name: {
+        type: "string",
+        required: true,
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
@@ -100,3 +112,5 @@ async function sendEmailVerification(email: string, otp: string) {
     throw error;
   }
 }
+
+type Session = typeof auth.$Infer.Session;
