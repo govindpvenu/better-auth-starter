@@ -1,28 +1,20 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Github, Mail } from "lucide-react";
-import { Twitter } from "lucide-react";
+import { Icons } from "@/constants/icons";
 export function ConnectedAccounts() {
   const connectedAccounts = [
     {
       id: "github",
       name: "GitHub",
-      icon: Github,
+      icon: Icons.github,
       connected: true,
       action: "Disconnect",
     },
     {
       id: "google",
       name: "Google",
-      icon: Mail,
-      connected: false,
-      action: "Connect",
-    },
-    {
-      id: "twitter",
-      name: "Twitter",
-      icon: Twitter,
+      icon: Icons.google,
       connected: false,
       action: "Connect",
     },

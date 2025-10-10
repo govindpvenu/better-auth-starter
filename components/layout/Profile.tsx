@@ -39,9 +39,9 @@ export async function Profile() {
         <DropdownMenuTrigger asChild>
           <Avatar>
             <AvatarImage src={session?.user?.image ?? undefined} />
-            <AvatarFallback>
-              {session?.user?.name[0]}
-              {session?.user?.name[0]}
+            <AvatarFallback className="uppercase">
+              {session?.user?.first_name?.[0]}
+              {session?.user?.last_name?.[0]}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>

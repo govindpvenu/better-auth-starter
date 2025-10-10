@@ -59,7 +59,7 @@ export default function AccountInfo({ user }: { user: Session["user"] }) {
               <p className="text-sm font-medium text-muted-foreground">
                 Member Since
               </p>
-              <p className="text-base font-semibold">
+              <p className="text-base font-medium">
                 {formatDate(user.createdAt)}
               </p>
               <p className="text-sm text-muted-foreground">
@@ -76,7 +76,7 @@ export default function AccountInfo({ user }: { user: Session["user"] }) {
               <p className="text-sm font-medium text-muted-foreground">
                 Profile Last Updated
               </p>
-              <p className="text-base font-semibold">
+              <p className="text-base font-medium">
                 {formatDate(user.updatedAt)}
               </p>
               <p className="text-sm text-muted-foreground">
