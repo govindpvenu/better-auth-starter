@@ -6,6 +6,7 @@ import { ConnectedAccounts } from "./_components/ConnectedAccounts";
 import SecuritySettings from "./_components/SecuritySettings";
 import ActiveSessions from "./_components/ActiveSessions";
 import ChangeAvatar from "./_components/ChangeAvatar";
+import AccountInfo from "./_components/AccountInfo";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -55,6 +56,7 @@ export default async function SettingsPage() {
           {/* Profile Tab Content */}
           <TabsContent value="profile" className="space-y-6">
             <ProfileDetails user={session?.user} />
+            <AccountInfo user={session?.user} />
             <ConnectedAccounts />
           </TabsContent>
 
