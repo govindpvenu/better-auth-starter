@@ -4,7 +4,6 @@ import { Loader } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { AlertDialogAction } from "../ui/alert-dialog";
 import { useState } from "react";
 import { Button } from "../ui/button";
 

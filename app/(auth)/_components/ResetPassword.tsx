@@ -12,7 +12,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Password } from "@/components/password";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";

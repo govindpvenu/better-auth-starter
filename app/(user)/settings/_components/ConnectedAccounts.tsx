@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Github, Mail } from "lucide-react";
-import { Star, Twitter } from "lucide-react";
+import { Twitter } from "lucide-react";
 export function ConnectedAccounts() {
   const connectedAccounts = [
     {
