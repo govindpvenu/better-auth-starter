@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Lock, Bell } from "lucide-react";
@@ -6,17 +5,25 @@ import ProfileDetails from "./_components/ProfileDetails";
 import { ConnectedAccounts } from "./_components/ConnectedAccounts";
 import SecuritySettings from "./_components/SecuritySettings";
 import ActiveSessions from "./_components/ActiveSessions";
+import ChangeAvatar from "./_components/ChangeAvatar";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  console.log("session:", session);
+
+  if (!session) {
+    return null;
+  }
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-4xl px-6 py-8">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Avatar className="h-16 w-16">
-            <AvatarImage src="/placeholder.svg" />
-            <AvatarFallback className="text-lg">JD</AvatarFallback>
-          </Avatar>
+          <ChangeAvatar image={session?.user?.image ?? null} />
           <div>
             <h1 className="text-3xl font-bold">Account Settings</h1>
             <p className="text-muted-foreground">
