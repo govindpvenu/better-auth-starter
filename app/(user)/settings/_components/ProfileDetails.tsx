@@ -4,9 +4,9 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { User } from "better-auth";
+import { Session } from "@/lib/auth-client";
 
-export default function ProfileDetails({ user }: { user: User }) {
+export default function ProfileDetails({ user }: { user: Session["user"] }) {
   const [firstName, setFirstName] = useState(user.first_name);
   const [lastName, setLastName] = useState(user.last_name);
   const [email, setEmail] = useState(user.email);

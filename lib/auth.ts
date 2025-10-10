@@ -112,5 +112,4 @@ async function sendEmailVerification(email: string, otp: string) {
     throw error;
   }
 }
-
-type Session = typeof auth.$Infer.Session;
+export type Session = typeof auth.$Infer.Session;
