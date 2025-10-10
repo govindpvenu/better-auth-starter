@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Lock, Bell } from "lucide-react";
+import { User, Lock, Bell, Palette, Fingerprint, Shield } from "lucide-react";
 import ProfileDetails from "./_components/ProfileDetails";
 import { ConnectedAccounts } from "./_components/ConnectedAccounts";
 import SecuritySettings from "./_components/SecuritySettings";
@@ -26,7 +26,7 @@ export default async function SettingsPage() {
         <div className="flex items-center gap-4 mb-8">
           <ChangeAvatar image={session?.user?.image ?? null} />
           <div>
-            <h1 className="text-3xl font-bold">Account Settings</h1>
+            <h1 className="text-3xl font-bold">Settings</h1>
             <p className="text-muted-foreground">
               Manage your account settings and preferences
             </p>
@@ -35,14 +35,22 @@ export default async function SettingsPage() {
 
         <Tabs defaultValue="profile" className="w-full">
           {/* Tabs Navigation */}
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid w-full grid-cols-5 mb-8">
             <TabsTrigger value="profile" className="flex items-center gap-2">
               <User className="h-4 w-4" />
               Profile
             </TabsTrigger>
+            <TabsTrigger value="account" className="flex items-center gap-2">
+              <Fingerprint className="h-4 w-4" />
+              Account
+            </TabsTrigger>
             <TabsTrigger value="security" className="flex items-center gap-2">
-              <Lock className="h-4 w-4" />
+              <Shield className="h-4 w-4" />
               Security
+            </TabsTrigger>
+            <TabsTrigger value="appearance" className="flex items-center gap-2">
+              <Palette className="h-4 w-4" />
+              Appearance
             </TabsTrigger>
             <TabsTrigger
               value="notifications"
@@ -57,6 +65,10 @@ export default async function SettingsPage() {
           <TabsContent value="profile" className="space-y-6">
             <ProfileDetails user={session?.user} />
             <AccountInfo user={session?.user} />
+          </TabsContent>
+
+          {/* Account Tab Content */}
+          <TabsContent value="account" className="space-y-6">
             <ConnectedAccounts />
           </TabsContent>
 
@@ -64,6 +76,20 @@ export default async function SettingsPage() {
           <TabsContent value="security" className="space-y-6">
             <SecuritySettings />
             <ActiveSessions />
+          </TabsContent>
+
+          {/* Appearance Tab Content */}
+          <TabsContent value="appearance">
+            <Card>
+              <CardHeader>
+                <CardTitle>Appearance Preferences</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Appearance preferences will be implemented here.
+                </p>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Notifications Tab Content */}
