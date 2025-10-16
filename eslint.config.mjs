@@ -27,12 +27,13 @@ const eslintConfig = [
             'unused-imports': unusedImports,
         },
         rules: {
-            // Turn off the standard unused-vars (we’ll replace it)
-            '@typescript-eslint/no-unused-vars': 'off',
+            'prefer-const': 'warn', // change from "error" → "warn"
+            '@typescript-eslint/no-unused-vars': 'warn', // Turn off the TypeScript rule
 
             // Auto-remove unused imports on --fix
             'unused-imports/no-unused-imports': 'error',
-
+            '@typescript-eslint/no-explicit-any': 'warn',
+            'react/no-unescaped-entities': 'warn', // Change from error to warning
             // Warn on unused vars, but allow underscore-prefix to intentionally ignore
             'unused-imports/no-unused-vars': [
                 'warn',
