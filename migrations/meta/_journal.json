@@ -1,27 +1,27 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1757484241947,
-      "tag": "0000_rich_madame_masque",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1757500991061,
-      "tag": "0001_glorious_thor",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1760079799288,
-      "tag": "0002_reflective_crystal",
-      "breakpoints": true
-    }
-  ]
+    "version": "7",
+    "dialect": "postgresql",
+    "entries": [
+        {
+            "idx": 0,
+            "version": "7",
+            "when": 1757484241947,
+            "tag": "0000_rich_madame_masque",
+            "breakpoints": true
+        },
+        {
+            "idx": 1,
+            "version": "7",
+            "when": 1757500991061,
+            "tag": "0001_glorious_thor",
+            "breakpoints": true
+        },
+        {
+            "idx": 2,
+            "version": "7",
+            "when": 1760079799288,
+            "tag": "0002_reflective_crystal",
+            "breakpoints": true
+        }
+    ]
 }

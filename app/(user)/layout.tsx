@@ -1,14 +1,14 @@
-import Header from "@/components/layout/header";
+import Header from '@/components/layout/header';
 
 export default function UserLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  return (
-    <main className="">
-      <Header />
-      {children}
-    </main>
-  );
+    return (
+        <main className="">
+            <Header />
+            {children}
+        </main>
+    );
 }

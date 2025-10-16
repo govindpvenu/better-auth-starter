@@ -1,52 +1,53 @@
-"use server";
+'use server';
 
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 
 export async function sendEmail(data: { email: string; otp: string }) {
-  const { email, otp } = data;
+    const { email, otp } = data;
 
-  // sanity checks (optional but helpful)
-  const { SMTP_HOST, SMTP_USER, SMTP_PASS, SMTP_FROM, SMTP_PORT } = process.env;
-  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS || !SMTP_FROM) {
-    console.error("Missing SMTP env vars");
-    return {
-      success: false,
-      message: "Server email configuration incomplete.",
-    };
-  }
-  const port = Number(SMTP_PORT || 465);
-  const secure = port === 465; // true for 465, false for 587
+    // sanity checks (optional but helpful)
+    const { SMTP_HOST, SMTP_USER, SMTP_PASS, SMTP_FROM, SMTP_PORT } =
+        process.env;
+    if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS || !SMTP_FROM) {
+        console.error('Missing SMTP env vars');
+        return {
+            success: false,
+            message: 'Server email configuration incomplete.',
+        };
+    }
+    const port = Number(SMTP_PORT || 465);
+    const secure = port === 465; // true for 465, false for 587
 
-  const transporter = nodemailer.createTransport({
-    host: SMTP_HOST, // e.g. "smtp.gmail.com"
-    port, // 465 or 587
-    secure, // true for 465
-    auth: {
-      user: SMTP_USER,
-      pass: SMTP_PASS, // app password (not regular password)
-    },
-  });
-
-  try {
-    const info = await transporter.sendMail({
-      from: SMTP_FROM, // "Your Name <your@gmail.com>"
-      to: email,
-      subject: "One-Time Password",
-      text: `Your one-time password is ${otp}`,
+    const transporter = nodemailer.createTransport({
+        host: SMTP_HOST, // e.g. "smtp.gmail.com"
+        port, // 465 or 587
+        secure, // true for 465
+        auth: {
+            user: SMTP_USER,
+            pass: SMTP_PASS, // app password (not regular password)
+        },
     });
 
-    return {
-      success: true,
-      message: "Email sent successfully!",
-      id: info.messageId,
-    };
-  } catch (error: any) {
-    console.error("SMTP error:", error);
-    return {
-      success: false,
-      message: error?.message || "Failed to send email.",
-    };
-  }
+    try {
+        const info = await transporter.sendMail({
+            from: SMTP_FROM, // "Your Name <your@gmail.com>"
+            to: email,
+            subject: 'One-Time Password',
+            text: `Your one-time password is ${otp}`,
+        });
+
+        return {
+            success: true,
+            message: 'Email sent successfully!',
+            id: info.messageId,
+        };
+    } catch (error: any) {
+        console.error('SMTP error:', error);
+        return {
+            success: false,
+            message: error?.message || 'Failed to send email.',
+        };
+    }
 }
 
 //For API route use this code
