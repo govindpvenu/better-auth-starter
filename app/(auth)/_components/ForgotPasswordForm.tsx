@@ -3,20 +3,13 @@ import * as z from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
-import { useForm } from 'react-hook-form';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
+import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { Spinner } from '@/components/ui/spinner';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 
 const formSchema = z.object({
     email: z.email(),
@@ -62,55 +55,51 @@ export default function ForgotPasswordForm({ email }: { email: string }) {
     }
 
     return (
-        <div>
-            <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="flex flex-col gap-6"
-                >
-                    <div className="flex flex-col items-center gap-2 text-center">
-                        <h1 className="text-2xl font-bold">Forgot Password</h1>
-                        <p className="text-muted-foreground text-center text-sm">
-                            Enter your email to receive a reset link.
-                        </p>
-                    </div>
+        <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+        >
+            <div className="flex flex-col items-center gap-2 text-center">
+                <h1 className="text-2xl font-bold">Forgot Password</h1>
+                <p className="text-muted-foreground text-center text-sm">
+                    Enter your email to receive a reset link.
+                </p>
+            </div>
 
-                    <div className="grid gap-6">
-                        <div className="grid gap-3">
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem className="w-full">
-                                        <FormLabel>Email *</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type={'email'}
-                                                value={field.value}
-                                                onChange={(e) => {
-                                                    const val = e.target.value;
-                                                    field.onChange(val);
-                                                }}
-                                                required
-                                                placeholder="Enter your Email"
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
+            <div className="grid gap-2">
+                <div className="grid gap-2">
+                    <Controller
+                        name="email"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={field.name}>
+                                    Email *
+                                </FieldLabel>
+                                <Input
+                                    {...field}
+                                    id={field.name}
+                                    aria-invalid={fieldState.invalid}
+                                    type="email"
+                                    placeholder="Enter your Email"
+                                    autoComplete="off"
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
                                 )}
-                            />
-                        </div>
+                            </Field>
+                        )}
+                    />
+                </div>
 
-                        <Button
-                            disabled={isLoading}
-                            className="relative rounded-lg"
-                            size="sm"
-                        >
-                            {isLoading ? <Spinner /> : 'Send Reset Email'}
-                        </Button>
-                    </div>
-                </form>
-            </Form>
-        </div>
+                <Button
+                    disabled={isLoading}
+                    className="relative rounded-lg"
+                    size="sm"
+                >
+                    {isLoading ? <Spinner /> : 'Send Reset Email'}
+                </Button>
+            </div>
+        </form>
     );
 }

@@ -3,15 +3,7 @@ import * as z from 'zod';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
-import { useForm } from 'react-hook-form';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
+import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Password } from '@/components/password';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -26,6 +18,7 @@ import { GitHubAuth } from './GitHubAuth';
 import { GoogleAuth } from './GoogleAuth';
 import { Badge } from '@/components/ui/badge';
 import { Spinner } from '@/components/ui/spinner';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 
 const formSchema = z.object({
     email: z.email(),
@@ -51,6 +44,7 @@ export function SignInForm() {
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        mode: 'onBlur',
         defaultValues: {
             email: 'test@test.com',
             password: '12345678',
@@ -107,127 +101,133 @@ export function SignInForm() {
     }
 
     return (
-        <div>
-            <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="flex flex-col gap-6"
+        <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+        >
+            <div className="flex flex-col items-center gap-2 text-center">
+                <h1 className="text-2xl font-bold">Welcome back</h1>
+                <p className="text-muted-foreground text-sm text-balance">
+                    Enter your email to sign-in to your account
+                </p>
+            </div>
+
+            <div className="grid gap-4">
+                <div className="grid gap-2">
+                    <Controller
+                        name="email"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <FieldLabel htmlFor={field.name}>
+                                    Email *
+                                </FieldLabel>
+                                <Input
+                                    {...field}
+                                    id={field.name}
+                                    aria-invalid={fieldState.invalid}
+                                    type={'email'}
+                                    placeholder="Enter your Email"
+                                    autoComplete="off"
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+                </div>
+
+                <div className="grid gap-2">
+                    <Controller
+                        name="password"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <div className="flex items-center">
+                                    <FieldLabel htmlFor={field.name}>
+                                        Password *
+                                    </FieldLabel>
+                                    <Link
+                                        href={`/forgot-password?email=${form.watch('email')}`}
+                                        className="ml-auto text-sm underline-offset-4 hover:underline"
+                                    >
+                                        Forgot your password?
+                                    </Link>
+                                </div>
+                                <Password
+                                    {...field}
+                                    id={field.name}
+                                    aria-invalid={fieldState.invalid}
+                                    placeholder="Password"
+                                />
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+                </div>
+
+                <div className="grid gap-2">
+                    <Controller
+                        name="remember_me"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                                <div className="flex flex-row items-center gap-2">
+                                    <Checkbox
+                                        id={field.name}
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <FieldLabel
+                                        htmlFor={field.name}
+                                        className="cursor-pointer text-sm font-normal"
+                                    >
+                                        Remember me
+                                    </FieldLabel>
+                                </div>
+                                {fieldState.invalid && (
+                                    <FieldError errors={[fieldState.error]} />
+                                )}
+                            </Field>
+                        )}
+                    />
+                </div>
+
+                <Button
+                    disabled={isLoading}
+                    className="relative rounded-lg"
+                    size="sm"
                 >
-                    <div className="flex flex-col items-center gap-2 text-center">
-                        <h1 className="text-2xl font-bold">Welcome back</h1>
-                        <p className="text-muted-foreground text-sm text-balance">
-                            Enter your email to sign-in to your account
-                        </p>
-                    </div>
-
-                    <div className="grid gap-6">
-                        <div className="grid gap-3">
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem className="w-full">
-                                        <FormLabel>Email *</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                type={'email'}
-                                                value={field.value}
-                                                onChange={(e) => {
-                                                    const val = e.target.value;
-                                                    field.onChange(val);
-                                                }}
-                                                required
-                                                placeholder="Enter your Email"
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <div className="grid gap-3">
-                            <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem className="w-full">
-                                        <div className="flex items-center">
-                                            <FormLabel>Password *</FormLabel>
-                                            <Link
-                                                href={`/forgot-password?email=${form.watch('email')}`}
-                                                className="ml-auto text-sm underline-offset-4 hover:underline"
-                                            >
-                                                Forgot your password?
-                                            </Link>
-                                        </div>
-                                        <FormControl>
-                                            <Password
-                                                {...field}
-                                                required
-                                                placeholder="Password"
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <div className="grid gap-3">
-                            <FormField
-                                control={form.control}
-                                name="remember_me"
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center">
-                                        <FormControl>
-                                            <Checkbox
-                                                checked={field.value}
-                                                onCheckedChange={field.onChange}
-                                            />
-                                        </FormControl>
-                                        <FormLabel className="text-sm font-normal">
-                                            Remember me
-                                        </FormLabel>
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <Button
-                            disabled={isLoading}
-                            className="relative rounded-lg"
-                            size="sm"
+                    {mounted && lastMethod === 'email' && (
+                        <Badge
+                            variant="secondary"
+                            className="absolute top-0 right-0 z-10 -mt-2 -mr-2 leading-none"
                         >
-                            {mounted && lastMethod === 'email' && (
-                                <Badge
-                                    variant="secondary"
-                                    className="absolute top-0 right-0 z-10 -mt-2 -mr-2 leading-none"
-                                >
-                                    Last used
-                                </Badge>
-                            )}
-                            {isLoading ? <Spinner /> : 'Sign In'}
-                        </Button>
+                            Last used
+                        </Badge>
+                    )}
+                    {isLoading ? <Spinner /> : 'Sign In'}
+                </Button>
 
-                        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                            <span className="bg-background text-muted-foreground relative z-10 px-2">
-                                Or continue with
-                            </span>
-                        </div>
+                <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                    <span className="bg-background text-muted-foreground relative z-10 px-2">
+                        Or continue with
+                    </span>
+                </div>
 
-                        <GitHubAuth lastMethod={lastMethod} />
+                <GitHubAuth lastMethod={lastMethod} />
 
-                        <GoogleAuth lastMethod={lastMethod} />
-                    </div>
-                    <div className="text-center text-sm">
-                        Don&apos;t have an account?{' '}
-                        <Link
-                            href="/sign-up"
-                            className="underline underline-offset-4"
-                        >
-                            Sign up
-                        </Link>
-                    </div>
-                </form>
-            </Form>
-        </div>
+                <GoogleAuth lastMethod={lastMethod} />
+            </div>
+            <div className="text-center text-sm">
+                Don&apos;t have an account?{' '}
+                <Link href="/sign-up" className="underline underline-offset-4">
+                    Sign up
+                </Link>
+            </div>
+        </form>
     );
 }

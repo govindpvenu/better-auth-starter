@@ -6,17 +6,10 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Session, authClient } from '@/lib/auth-client';
-import { useForm } from 'react-hook-form';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 
 const formSchema = z.object({
     firstName: z.string().min(1, { message: 'First name is required' }),
@@ -68,62 +61,72 @@ export default function ProfileDetails({ user }: { user: Session['user'] }) {
                 <CardTitle>Profile Details</CardTitle>
             </CardHeader>
             <CardContent>
-                <Form {...form}>
-                    <form
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-6"
-                    >
-                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                            <FormField
-                                control={form.control}
-                                name="firstName"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>First name</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                {...field}
-                                                placeholder="Enter your first name"
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="flex flex-col gap-4"
+                >
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <Controller
+                            name="firstName"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor={field.name}>
+                                        First name
+                                    </FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id={field.name}
+                                        aria-invalid={fieldState.invalid}
+                                        placeholder="Enter your first name"
+                                    />
+                                    {fieldState.invalid && (
+                                        <FieldError
+                                            errors={[fieldState.error]}
+                                        />
+                                    )}
+                                </Field>
+                            )}
+                        />
+                        <Controller
+                            name="lastName"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor={field.name}>
+                                        Last name
+                                    </FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id={field.name}
+                                        aria-invalid={fieldState.invalid}
+                                        placeholder="Enter your last name"
+                                    />
+                                    {fieldState.invalid && (
+                                        <FieldError
+                                            errors={[fieldState.error]}
+                                        />
+                                    )}
+                                </Field>
+                            )}
+                        />
+                        <div className="space-y-2">
+                            <FieldLabel htmlFor="email">Email</FieldLabel>
+                            <Input
+                                readOnly
+                                id="email"
+                                type="email"
+                                defaultValue={user.email}
+                                className="bg-muted"
                             />
-                            <FormField
-                                control={form.control}
-                                name="lastName"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Last name</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                {...field}
-                                                placeholder="Enter your last name"
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <div className="space-y-2">
-                                <FormLabel htmlFor="email">Email</FormLabel>
-                                <Input
-                                    readOnly
-                                    id="email"
-                                    type="email"
-                                    defaultValue={user.email}
-                                    className="bg-muted"
-                                />
-                            </div>
                         </div>
-                        <div className="mt-6 flex justify-end">
-                            <Button type="submit" disabled={isLoading}>
-                                {isLoading ? <Spinner /> : 'Save Changes'}
-                            </Button>
-                        </div>
-                    </form>
-                </Form>
+                    </div>
+                    <div className="mt-2 flex justify-end">
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? <Spinner /> : 'Save Changes'}
+                        </Button>
+                    </div>
+                </form>
             </CardContent>
         </Card>
     );
