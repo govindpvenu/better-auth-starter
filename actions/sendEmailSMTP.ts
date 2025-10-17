@@ -2,8 +2,12 @@
 
 import nodemailer from 'nodemailer';
 
-export async function sendEmail(data: { email: string; otp: string }) {
-    const { email, otp } = data;
+export async function sendEmailSMTP(data: {
+    email: string;
+    subject: string;
+    text: string;
+}) {
+    const { email, subject, text } = data;
 
     // sanity checks (optional but helpful)
     const { SMTP_HOST, SMTP_USER, SMTP_PASS, SMTP_FROM, SMTP_PORT } =
@@ -32,8 +36,8 @@ export async function sendEmail(data: { email: string; otp: string }) {
         const info = await transporter.sendMail({
             from: SMTP_FROM, // "Your Name <your@gmail.com>"
             to: email,
-            subject: 'One-Time Password',
-            text: `Your one-time password is ${otp}`,
+            subject: subject,
+            text: text,
         });
 
         return {
