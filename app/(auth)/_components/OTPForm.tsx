@@ -53,6 +53,7 @@ export function OTPForm({ stage }: { stage: Stage }) {
                     setLoading(true);
                 },
                 onSuccess: async (ctx) => {
+                    setLoading(false);
                     router.push('/');
                 },
                 onError: (ctx) => {
